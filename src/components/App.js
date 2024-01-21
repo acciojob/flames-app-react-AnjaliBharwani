@@ -1,79 +1,82 @@
-import React, { useState } from "react";
-import "../styles/App.css";
+import React, {useState} from "react";
+import '../styles/App.css';
+// import { set } from "cypress/types/lodash";
 
-let relations = ["Siblings", "Friends", "Love", "Affection", "Marriage", "Enemy"]
-const App = () => {
-  const [name1, setName1] = useState("");
-  const [name2, setName2] = useState("");
-const [printResult, setPrintResult] = useState(false)
-  const [relationShip, setRelationShip] = useState("");
-  console.log(name1, name2);
+let arr= ["Siblings", "Friends", "Love", "Affection", "Marriage", "Enemy" ]
 
-  function calculateRelationShip(e) {
-    e.preventDefault();
-    // for(let ch of name1){
-    //     if (name2.includes(ch)) {
-    //         setName1(name1.replace(ch, ""))
-    //         setName2(name2.replace(ch, ""))
-    //     }
-    // }
-    let str1 = name1;
-    let str2 = name2;
+const App = ()=> {
+    const [name1, setName1] = useState(""); //Soumya
+    const [name2, setName2] = useState(""); //ansh
+    const [relationship, setRelationship] = useState(""); 
+    const [btnClicked, setBtnClicked] = useState(false);
 
-    for (let ch of str1) {
-      if (str2.includes(ch)) {
-        str1 = str1.replace(ch, "");
-        str2 = str2.replace(ch, "");
-      }
+    console.log(name1, name2)
+
+
+    function calculateRelationship(e){
+        e.preventDefault();
+
+        if(name1.trim() === "" || name2.trim() === ""){
+            setBtnClicked(false);
+            setRelationship("Please Enter valid names");
+            return
+        }
+         
+        let str1 = name1 
+        let str2 = name2
+        for(let t of str1){ // Soumya // ansh
+             if(str2.includes(t)){
+               str1 =  str1.replace(t,"");
+               str2 = str2.replace(t,"");
+             }
+        }
+        setName1(str1);
+        setName2(str2);
+        setBtnClicked(true);
+        setRelationship(arr[(str1.length + str2.length)%6]);
+        
     }
 
-    console.log(str1, str2)
-    setName1(str1);
-    setName2(str2);
-    setPrintResult(true)
-    // setRelationShip(relations[(str1.length + str2.length)%6]);
 
-  }
+        return(
+            <div id="main">
 
-  return (
-    <div id="main">
-      {/* Do not remove the main div */}
-      <input
-        type="text"
-        name = "name1test"
-        placeholder="First Name"
-        data-testid="input1"
-        onChange={(e) => setName1(e.target.value)}
-        value={name1}
-      />
-      <input
-        type="text"
-        name = "name2"
-        placeholder="Second Name"
-        data-testid="input2"
-        onChange={(e) => setName2(e.target.value)}
-        value={name2}
-      />
-      <button
-        onClick={calculateRelationShip}
-        data-testid="calculate_relationship"
-      >
-        Calculate Relationship Future
-      </button>
-      <button data-testid="clear" onClick={()=>{
-        setPrintResult(false);
-        setName1("");
-        setName2("");
+                <form>
+                     <input type="text" data-testid="input1" placeholder="Enter First Name" name="name1"
+                        onChange={(e)=>setName1(e.target.value)} 
+                        value={name1}
+                     />
+                     <input type="text" data-testid="input2" placeholder="Enter Second Name"  name="name2"
+                        onChange={(e)=>setName2(e.target.value)} 
+                        value={name2}
+                     />
+                     <button data-testid="calculate_relationship" type="submit" 
+                      onClick={calculateRelationship}
+                     >Calculate Relationship Future</button>
+                     <button data-testid="clear" type="reset" 
+                        onClick={()=>{
+                            setName1("");
+                            setName2("");
+                            setBtnClicked(false);
+                            setRelationship("");
+                        }}
+                     >Clear</button>
+                </form>
 
+                <h3 data-testid="answer">
+                     {
+                            btnClicked && arr[(name1.length + name2.length)%6]  
+                     }
+                        {
+                          relationship
+                        }
+                </h3>
+               
+            </div>
+        )
+    
+}
 
-      }}>Clear</button>
-      <h3 data-testid="answer">
-        {
-            printResult && relations[(name1.length+name2.length)%6]
-        }        
-      </h3>
-    </div>
-  );
-};
 
 export default App;
+
