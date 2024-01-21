@@ -26,8 +26,8 @@ const App = ()=> {
         let str2 = name2
         for(let t of str1){ // Soumya // ansh
              if(str2.includes(t)){
-               str1 =  str1.replace(t,"");
-               str2 = str2.replace(t,"");
+              str1 = str1.replace(new RegExp(t, 'g'), "");
+              str2 = str2.replace(new RegExp(t, 'g'), "");
              }
         }
         setName1(str1);
